@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const Promise = require("bluebird");
 const request = require("request-promise");
-Promise.promisifyAll(request);
 
 class Cliente {
 
@@ -10,7 +9,7 @@ class Cliente {
   }
 
   getMaster() {
-    return !_.isNull(this.master) ? Promise.resolve(this.master) : this.buscarMaster();
+    return !_.isUndefined(this.master) ? Promise.resolve(this.master) : this.buscarMaster();
   }
 
   buscarMaster() {
@@ -19,6 +18,17 @@ class Cliente {
     .get(0)
     .tap(master => this.master = master)
   };
+
+  esMaster(orquestador) {
+    const options = {
+      method: "GET",
+      uri:`${orquestador}/master`,
+      json: true
+    }
+    return Promise.resolve(request(options))
+      .get("esMaster")
+  }
+
 
   obtenerValor(key) {
     return this._requestMaster({
@@ -59,15 +69,6 @@ class Cliente {
       }));
   }
 
-  esMaster(orquestador) {
-    const options = {
-      method: "GET",
-      uri:`${orquestador}/master`
-    }
-    return request(options)
-      .tap(console.log)
-      .get("esMaster");
-  }
 
 }
 

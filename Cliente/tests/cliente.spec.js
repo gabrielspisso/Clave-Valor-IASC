@@ -1,28 +1,36 @@
 const nock = require("nock");
 const Cliente = require("../api/model/cliente");
+const should = require("should");
+const _ = require("lodash");
 nock.disableNetConnect();
 nock.enableNetConnect('127.0.0.1');
 
+     
 describe("Cliente", () => {
   beforeEach(()=> {
      nock.cleanAll();
+     setNocks();
+     cliente = new Cliente()
+     cliente.orquestadores = ["http://paredes.com", "http://spisso.com"];
   })
 
 
-  it("elige el master como los dioses egipcios", () => {
-
+  it("Elige el master bien", () => {
+    return cliente.getMaster()
+    .tap(() => nock.isDone().should.be.true())
+    .should.eventually.be.eql("http://paredes.com")
   })
 
  
 });
 
-// const fetchAvailableFiltersEpicTest = (filterNames, result) => {
-//  nock('http://soy.producteca.com')
-//     .get('/products/availableFilters')
-//     .query(() => true)
-//     .reply(200, filterNames);
-//   return epics.fetchAvailableFiltersEpic(ACTION("fetchAvailableFilters"), store)
-//   .toArray()
-//   .toPromise(Promise)
-//   .then((emmitedActions) => emmitedActions.should.eql(result))
-// }
+const setNocks = () => {
+  nock('http://paredes.com')
+    .get('/master')
+    .reply(200, { esMaster: true });
+  nock('http://spisso.com')
+    .get('/master')
+    .reply(200, { esMaster: false });
+
+
+}
