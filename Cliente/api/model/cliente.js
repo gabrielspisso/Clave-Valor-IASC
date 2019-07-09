@@ -18,14 +18,30 @@ class Cliente {
     return Promise.filter(this.orquestadores, this.esMaster, { concurrency: 10 })
     .get(0)
     .tap(master => this.master = master)
-  }
+  };
 
   obtenerValor(key) {
     return this._requestMaster({
       method: "GET",
       resource: `${key}`
-    })
-  } 
+    });
+  }
+
+  obtenerMayoresA(valor) {
+    return this._requestMaster({
+      method: "GET",
+      resource: "mayorA"
+      qs: { valor }
+    });
+  }
+
+  obtenerMenoresA(valor) {
+    return this._requestMaster({
+      method: "GET",
+      resource: "menorA"
+      qs: { valor }
+    });
+  }
 
   _requestMaster(options) {
     return this.getMaster()

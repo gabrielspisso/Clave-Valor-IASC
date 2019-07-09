@@ -7,16 +7,16 @@ class Controller {
 
   }
 
-  obtenerValor({ params: { key }}) {
+  obtenerValor({ params: { key } }) {
     return this.cliente.obtenerValor(key);
   }
 
-  mayorA() {
-
+  mayorA({ query: { valor } }) {
+    return this.cliente.obtenerMayoresA(valor);
   }
 
-  menorA() {
-
+  menorA({ query: { valor } }) {
+    return this.cliente.obtenerMenoresA(valor);
   }
 
   crearValor() {
