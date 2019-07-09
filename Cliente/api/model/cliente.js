@@ -1,6 +1,6 @@
-import _ from "lodash";
-import Promise from "bluebird";
-import request from "request-promise";
+const _ = require("lodash");
+const Promise = require("bluebird");
+const request = require("request-promise");
 Promise.promisifyAll(request);
 
 class Cliente {
@@ -30,7 +30,7 @@ class Cliente {
   obtenerMayoresA(valor) {
     return this._requestMaster({
       method: "GET",
-      resource: "mayorA"
+      resource: "mayorA",
       qs: { valor }
     });
   }
@@ -38,7 +38,7 @@ class Cliente {
   obtenerMenoresA(valor) {
     return this._requestMaster({
       method: "GET",
-      resource: "menorA"
+      resource: "menorA",
       qs: { valor }
     });
   }
@@ -46,7 +46,7 @@ class Cliente {
   crearValor(par) {
     return this._requestMaster({
       method: "POST",
-      resource: ""
+      resource: "",
       json: par
     });
   }
@@ -71,4 +71,4 @@ class Cliente {
 
 }
 
-module.exports = new Cliente();
+module.exports = Cliente;
