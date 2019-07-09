@@ -19,8 +19,8 @@ class Controller {
     return this.cliente.obtenerMenoresA(valor);
   }
 
-  crearValor() {
-
+  crearValor({ body }) {
+    return this.cliente.crearValor(body);
   }
 
 }

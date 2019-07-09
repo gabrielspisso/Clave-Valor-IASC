@@ -43,6 +43,14 @@ class Cliente {
     });
   }
 
+  crearValor(par) {
+    return this._requestMaster({
+      method: "POST",
+      resource: ""
+      json: par
+    });
+  }
+
   _requestMaster(options) {
     return this.getMaster()
       .then(master => request({ 
