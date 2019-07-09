@@ -4,10 +4,11 @@ class Controller {
 
   constructor() {
     this.cliente = new Cliente();
+
   }
 
-  obtenerValor() {
-
+  obtenerValor({ params: { key }}) {
+    return this.cliente.obtenerValor(key);
   }
 
   mayorA() {

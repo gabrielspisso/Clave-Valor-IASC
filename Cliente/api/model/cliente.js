@@ -20,6 +20,21 @@ class Cliente {
     .tap(master => this.master = master)
   }
 
+  obtenerValor(key) {
+    return this._requestMaster({
+      method: "GET",
+      resource: `${key}`
+    })
+  } 
+
+  _requestMaster(options) {
+    return this.getMaster()
+      .then(master => request({ 
+        uri: `${master}/${options.resource}`,
+        ...options
+      }));
+  }
+
   esMaster(orquestador) {
     const options = {
       method: "GET",
