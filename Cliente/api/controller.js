@@ -1,6 +1,10 @@
-const service = require('./model/cliente');
+const Cliente = require('./model/cliente');
 
 class Controller {
+
+  constructor() {
+    this.cliente = new Cliente();
+  }
 
   obtenerValor() {
 
