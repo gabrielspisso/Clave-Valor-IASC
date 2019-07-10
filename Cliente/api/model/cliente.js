@@ -38,20 +38,21 @@ class Cliente {
   }
 
   obtenerMayoresA(valor) {
-    return this._requestMaster({
-      method: "GET",
-      resource: "mayorA",
-      qs: { valor }
-    });
+    return  obtenerValorSegunCriterio("mayorA",valor)
   }
 
   obtenerMenoresA(valor) {
+    return  obtenerValorSegunCriterio("menorA",valor)
+  }
+  
+  obtenerValorSegunCriterio(criterio,valor) {
     return this._requestMaster({
       method: "GET",
-      resource: "menorA",
+      resource: criterio,
       qs: { valor }
     });
   }
+  
 
   crearValor(par) {
     return this._requestMaster({
