@@ -26,4 +26,4 @@ class Supervisor {
 	}
 }
 
-module.exports = new Supervisor();
+module.exports = Supervisor;
