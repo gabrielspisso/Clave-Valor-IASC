@@ -1,11 +1,11 @@
 const _ = require("lodash");
 const Promise = require("bluebird");
 const request = require("request-promise");
-
+const config = require("../../config")
 class Cliente {
 
   constructor() {
-    this.orquestadores = []
+    this.orquestadores = config.orquestadores
   }
 
   getMaster() {
