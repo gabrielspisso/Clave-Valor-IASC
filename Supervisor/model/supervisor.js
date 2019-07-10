@@ -20,8 +20,9 @@ class Supervisor {
 		this.master == id && this._setMaster(this.orchestrators[0])
 	}
 
-	_setMaster({ id } = {}) {
-		this.master = id;
+	_setMaster(orchestrator = {}) {
+		this.master = orchestrator.id;
+		this.master && orchestrator.emit("master");
 	}
 }
 
