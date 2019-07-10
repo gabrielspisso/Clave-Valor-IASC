@@ -3,14 +3,25 @@ const _ = require("lodash");
 class Supervisor {
 	constructor() {
 		this.orchestrators = [];
+		this.master = null;
 	}
 
 	add(orchestrator) {
 		this.orchestrators = this.orchestrators.concat(orchestrator);
+		this.master || this._setMaster(orchestrator);
 	}
 
-	remove(orchestrator) {
-		_.remove(this.orchestrators, { id: orchestrator.id });
+	remove({ id }) {
+		_.remove(this.orchestrators, { id });
+		this._setMasterIfNeeded(id)
+	}
+
+	_setMasterIfNeeded(id) {
+		this.master == id && this._setMaster(this.orchestrators[0])
+	}
+
+	_setMaster({ id } = {}) {
+		this.master = id;
 	}
 }
 
