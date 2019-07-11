@@ -15,19 +15,19 @@ describe("Cliente", () => {
 
 
   it("Elige el master bien", () => {
-    var orquestadorMaster =config.orquestadores[0] 
+    const orquestadorMaster = config.orquestadores[0];
  
     return cliente.getMaster()
-    .tap(() => nock.isDone().should.be.true())
-    .should.eventually.be.eql(orquestadorMaster)
+      .tap(() => nock.isDone().should.be.true())
+      .should.eventually.be.eql(orquestadorMaster)
   })
 
  
 });
 
 const setNocks = () => {
-  var orquestadorMaster =config.orquestadores[0] 
-  var orquestadorNoMaster =config.orquestadores[1] 
+  const orquestadorMaster = config.orquestadores[0];
+  const orquestadorNoMaster = config.orquestadores[1]; 
 
   nock(orquestadorMaster)
     .get('/master')
