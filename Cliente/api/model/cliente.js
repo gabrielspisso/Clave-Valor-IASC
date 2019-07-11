@@ -1,7 +1,9 @@
 const _ = require("lodash");
 const Promise = require("bluebird");
 const request = require("request-promise");
-const config = require("../../config")
+const config = require("../../config");
+const NoHayMaster = require("./exceptions/noHayMaster");
+
 class Cliente {
 
   constructor() {
@@ -13,11 +15,17 @@ class Cliente {
   }
 
   buscarMaster() {
-    // VER SI NO EXISTE
     return Promise.filter(this.orquestadores, this.esMaster, { concurrency: 10 })
     .get(0)
+    .tap(this._throwIfUndefined)
     .tap(master => this.master = master)
   };
+
+  _throwIfUndefined(orquestador)
+  {
+    if(_.isUndefined(orquestador))
+      throw new NoHayMaster();
+  }
 
   esMaster(orquestador) {
     const options = {

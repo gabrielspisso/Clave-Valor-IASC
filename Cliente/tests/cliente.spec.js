@@ -2,39 +2,47 @@ const nock = require("nock");
 const Cliente = require("../api/model/cliente");
 const should = require("should");
 const _ = require("lodash");
-const config = require("../config")
+const { orquestadores } = require("../config")
+const NoHayMaster = require("../api/model/exceptions/noHayMaster");
 nock.disableNetConnect();
 nock.enableNetConnect('127.0.0.1');
 
 describe("Cliente", () => {
   beforeEach(()=> {
      nock.cleanAll();
-     setNocks();
      cliente = new Cliente()
   })
 
 
   it("Elige el master bien", () => {
-    const orquestadorMaster = config.orquestadores[0];
+    const orquestadoresNock = setOrquestadoresReply(orquestadores, [ true, false ]);
+    const { orquestador: orquestadorMaster } = _.find(orquestadoresNock, { esMaster: true });
+    
+    setNocks(orquestadoresNock)
  
     return cliente.getMaster()
       .tap(() => nock.isDone().should.be.true())
       .should.eventually.be.eql(orquestadorMaster)
   })
 
+  it("Tira error si no hay master", () => {
+    const orquestadoresNock = setOrquestadoresReply(orquestadores, [ false, false ])
+    setNocks(orquestadoresNock)
+          
+    return cliente.getMaster().should.be.rejectedWith(NoHayMaster)
+  })
+
  
 });
 
-const setNocks = () => {
-  const orquestadorMaster = config.orquestadores[0];
-  const orquestadorNoMaster = config.orquestadores[1]; 
+const setOrquestadoresReply = (orquestadores, respuestas) =>
+  _.zipWith(orquestadores, respuestas, (orquestador, esMaster) => ({ orquestador, esMaster }));
 
-  nock(orquestadorMaster)
-    .get('/master')
-    .reply(200, { esMaster: true });
-  nock(orquestadorNoMaster)
-    .get('/master')
-    .reply(200, { esMaster: false });
-
+const setNocks = (orquestadores) => {
+  orquestadores.forEach(({ orquestador, esMaster }) => {
+    nock(orquestador)
+      .get('/master')
+      .reply(200, { esMaster });
+  })
 
 }
