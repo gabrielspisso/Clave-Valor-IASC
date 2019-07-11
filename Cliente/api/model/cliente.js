@@ -11,14 +11,17 @@ class Cliente {
   }
 
   getMaster() {
-    return !_.isUndefined(this.master) ? Promise.resolve(this.master) : this.buscarMaster();
+    return this.buscarMaster()
+      .then(() => this.master)
   }
 
   buscarMaster() {
+    if(!_.isUndefined(this.master))
+      return;
     return Promise.filter(this.orquestadores, this.esMaster, { concurrency: 10 })
-    .get(0)
-    .tap(this._throwIfUndefined)
-    .tap(master => this.master = master)
+      .get(0)
+      .tap(this._throwIfUndefined)
+      .tap(master => _.assign(this, { master }))
   };
 
   _throwIfUndefined(orquestador)
