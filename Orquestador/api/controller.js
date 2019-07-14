@@ -1,26 +1,30 @@
-const Cliente = require('./model/cliente');
+const Orquestador = require('./model/orquestador');
 
 class Controller {
 
   constructor() {
-    this.cliente = new Cliente();
+    this.orquestador = new Orquestador();
 
   }
 
   obtenerValor({ params: { key } }) {
-    return this.cliente.obtenerValor(key);
+    return this.orquestador.getValue(key);
   }
 
   mayorA({ query: { valor } }) {
-    return this.cliente.obtenerMayoresA(valor);
+    return this.orquestador.getHighThan(valor);
   }
 
   menorA({ query: { valor } }) {
-    return this.cliente.obtenerMenoresA(valor);
+    return this.orquestador.getLessThan(valor);
   }
 
   crearValor({ body }) {
-    return this.cliente.crearValor(body);
+    return this.orquestador.assignKeyAndValue(body);
+  }
+
+  esMaster(){
+    return this.orquestador.isMaster;
   }
 
 }

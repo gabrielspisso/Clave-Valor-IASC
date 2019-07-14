@@ -12,6 +12,7 @@ class Orquestador{
                 active: true 
             } 
         });
+        this.isMaster=false;
     }
 
     getNodeByKey(key){
@@ -39,7 +40,7 @@ class Orquestador{
             return resto -1
     }
 
-    assignKeyAndValue(){
+    assignKeyAndValue(body){
         //nada aun
     }
     
