@@ -29,7 +29,9 @@ describe("Cliente", () => {
     const orquestadoresNock = setOrquestadoresReply(orquestadores, [ false, false ])
     setNocks(orquestadoresNock)
           
-    return cliente.getMaster().should.be.rejectedWith(NoHayMaster)
+    return cliente.getMaster()
+    .tap(() => nock.isDone().should.be.true())
+    .should.be.rejectedWith(NoHayMaster)
   })
 
  
