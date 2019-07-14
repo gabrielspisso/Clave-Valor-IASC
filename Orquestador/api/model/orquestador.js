@@ -20,10 +20,8 @@ class Orquestador{
     }
 
     getId(key){
-        var hashId = new Id(key).toDec();
-        var resto = hashId % this.nodes.length;
-        var cociente = Math.floor(hashId / this.nodes.length);
-        return (resto == 0) ? cociente -1 : resto -1;
+        var hashId = new Id(key).toDec();//Siempre devuelve el mismo numero para una clave
+        return _calculateRealId(hashId);
     }
 
     nextNode(idNode){//Si el proximo nodo esta activo trae ese, sino busca uno activo
@@ -31,5 +29,20 @@ class Orquestador{
                 this.nodes[idNode+1] :
                 this.nodes.find( (node) => node.active);
     }
+
+    _calculateRealId(hashId){//Suma en un grupo ciclico
+        var resto = hashId % this.nodes.length;
+        var cociente = Math.floor(hashId / this.nodes.length);
+        if(resto == 0) 
+            return (cociente>this.nodes.size) ? _calculateRealId(cociente) : cociente-1
+        else 
+            return resto -1
+    }
+
+    assignKeyAndValue(){
+        //nada aun
+    }
     
 }
+
+module.exports = Orquestador;

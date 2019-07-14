@@ -1,3 +1,3 @@
 module.exports = {
-    datos: (process.env.DATOS || "").split(",")
+    nodes: (process.env.NODES || "").split(",")
 }
