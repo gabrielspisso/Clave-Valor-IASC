@@ -63,7 +63,12 @@ class Orquestador{
     }
 
     assignKeyAndValue(body){
-        //nada aun
+        var node = this.getNodeByKey(body.key);
+        return this._requestNode({
+            method: "GET",
+            resource: "",
+            json: body
+          });
     }
     
 }
