@@ -1,4 +1,5 @@
 const Id = require('dht-id');
+var sha1 = require('git-sha1');
 
 class NodeSelector{
     constructor(nodes){
@@ -11,8 +12,12 @@ class NodeSelector{
     }
 
     getId(key){
-        var hashId = new Id(key).toDec();//Siempre devuelve el mismo numero para una clave
-        return _calculateRealId(hashId);
+        var hashId = new Id(this.hashKey(key)).toDec();//Siempre devuelve el mismo numero para una clave
+        return this._calculateRealId(hashId);
+    }
+
+    hashKey(content) {
+        return sha1(content).substring(0, 6)
     }
 
     nextNode(idNode){//Si el proximo nodo esta activo trae ese, sino busca uno activo
@@ -20,14 +25,10 @@ class NodeSelector{
                 this.nodes[idNode+1] :
                 this.nodes.find( (node) => node.active);
     }
-
+        
     _calculateRealId(hashId){//Suma en un grupo ciclico
-        var resto = hashId % this.nodes.length;
-        var cociente = Math.floor(hashId / this.nodes.length);
-        if(resto == 0) 
-            return (cociente>this.nodes.size) ? _calculateRealId(cociente) : cociente-1
-        else 
-            return resto -1
+        for(;hashId>this.nodes.length;hashId-=4);
+        return hashId;
     }
 }
 module.exports = NodeSelector;
