@@ -40,6 +40,28 @@ class Orquestador{
             return resto -1
     }
 
+
+    
+    _requestNode(node, options) {
+        return request({ 
+            uri: `${node.ip}/${options.resource}`,
+            timeout: 10000,
+            ...options
+        })
+        .catch(function (err) {
+            node.active=false;
+            return err;
+        });
+    }
+    
+    getValue(key){
+        var node = this.getNodeByKey(key);
+        return this._requestNode({
+            method: "GET",
+            resource: key,
+          });
+    }
+
     assignKeyAndValue(body){
         //nada aun
     }
