@@ -16,7 +16,6 @@ class Controller {
     }
 
     escribirValor({ body }, res) {
-        console.log(body);
         if (this.bodyValido(body)) {
             this.repositorioDeDatos.escribirValor(body);
             res.sendStatus(200);
