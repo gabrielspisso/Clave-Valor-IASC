@@ -24,8 +24,7 @@ class Cliente {
       .tap(master => _.assign(this, { master }))
   };
 
-  _throwIfUndefined(orquestador)
-  {
+  _throwIfUndefined(orquestador) {
     if(_.isUndefined(orquestador))
       throw new NoHayMaster();
   }
