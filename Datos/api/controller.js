@@ -1,9 +1,9 @@
 const RepositorioDeDatos = require('./model/repositorioDeDatos');
 const _ = require("lodash");
 class Controller {
-    constructor(){
+    constructor() {
         this.repositorioDeDatos = new RepositorioDeDatos();
-        _.bindAll(this,["escribirValor","obtenerValorDeClave"])
+        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA"])
     }
     obtenerValorDeClave({ params: { key } }, response) {
         let valor = this.repositorioDeDatos.obtenerValor(key);
@@ -17,21 +17,25 @@ class Controller {
 
     escribirValor({ body }, res) {
         console.log(body);
-        if(this.bodyValido(body)){
+        if (this.bodyValido(body)) {
             this.repositorioDeDatos.escribirValor(body);
-            res.sendStatus(200);         
+            res.sendStatus(200);
         }
-        else{
+        else {
             res.sendStatus(400);
         }
     }
 
-    bodyValido(par){
+    bodyValido(par) {
         return par && par.clave && par.valor;
     }
 
-    obtenerValoresMayoresA({body: {clave}}){
-        this.repositorioDeDatos.obtenerValoresMayoresA(clave);
+    obtenerValoresMayoresA({ params: { value } }, res) {
+        res.json(this.repositorioDeDatos.obtenerValoresMayoresA(value));
+    }
+
+    obtenerValoresMenoresA({ params: { value } }, res) {
+        res.json(this.repositorioDeDatos.obtenerValoresMenoresA(value));
     }
 }
 

@@ -25,9 +25,18 @@ class RepositorioDeDatos {
     }
 
     obtenerValoresMayoresA(unValor) {
-        return this.datos.filter(({ valor }) => valor > unValor)
+        return this.obtenerValoresSegunCriterio(( valor ) => valor > unValor)
+    }
+
+    obtenerValoresMenoresA(unValor) {
+        return this.obtenerValoresSegunCriterio(  valor => valor < unValor)
+    }
+
+    obtenerValoresSegunCriterio(criterio) {
+        return this.datos.filter(({ valor }) => criterio(valor))
                 .map(dato => dato.valor)
     }
+
 
 }
 

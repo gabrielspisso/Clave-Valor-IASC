@@ -39,5 +39,17 @@ describe("repositorioDeDatos", () => {
         })
     })
 
+    describe("Obtener valor menor a otro valor", () => {
+        it("Puede devolver una lista vacia", () => {
+            repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });
+            return repositorioDeDatos.obtenerValoresMenoresA('a').should.be.empty()
+        })
+
+        it("Teniendo un valor mayor, se devuelve una lista con el valor mayor", () => {
+            repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });
+            return repositorioDeDatos.obtenerValoresMenoresA('z').should.be.containEql('y')
+        })
+    })
+
 });
 
