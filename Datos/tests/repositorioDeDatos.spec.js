@@ -7,10 +7,11 @@ describe("repositorioDeDatos", () => {
     })
 
     describe("Obtener Datos", () => {
-     
+
         it("Pedir el valor de una clave inexistente devuelve undefined", () => {
             return should(repositorioDeDatos.obtenerValor('x')).be.undefined()
         })
+
     })
 
     describe("Escribir datos", () => {
@@ -25,6 +26,18 @@ describe("repositorioDeDatos", () => {
             return repositorioDeDatos.obtenerValor('x').should.be.eql('y')
         })
     });
- 
+
+    describe("Obtener valor mayor a otro valor", () => {
+        it("Puede devolver una lista vacia", () => {
+            repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });
+            return repositorioDeDatos.obtenerValoresMayoresA('z').should.be.empty()
+        })
+
+        it("Teniendo un valor mayor, se devuelve una lista con el valor mayor", () => {
+            repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });
+            return repositorioDeDatos.obtenerValoresMayoresA('a').should.be.containEql('y')
+        })
+    })
+
 });
 

@@ -30,6 +30,9 @@ class Controller {
         return par && par.clave && par.valor;
     }
 
+    obtenerValoresMayoresA({body: {clave}}){
+        this.repositorioDeDatos.obtenerValoresMayoresA(clave);
+    }
 }
 
 module.exports = new Controller();
