@@ -1,2 +1,4 @@
-node_modules
+node_modules/
+*.sublime-workspace
+*.log
 package-lock.json
