@@ -82,6 +82,10 @@ class Orquestador{
     getHighThan(value){
         return getValuesByCondition("mayor",value);
     }
+
+    getLessThan(value){
+        return getValuesByCondition("menor",value);
+    }
     
 }
 
