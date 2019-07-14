@@ -4,7 +4,10 @@ class Controller {
 
   constructor() {
     this.cliente = new Cliente();
-
+    this.obtenerValor = this.obtenerValor.bind(this);
+    this.mayorA = this.mayorA.bind(this);
+    this.menorA = this.menorA.bind(this);
+    this.crearValor = this.crearValor.bind(this);
   }
 
   obtenerValor({ params: { key } }) {
