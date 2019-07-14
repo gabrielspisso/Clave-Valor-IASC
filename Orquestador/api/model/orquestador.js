@@ -39,8 +39,6 @@ class Orquestador{
         else 
             return resto -1
     }
-
-
     
     _requestNode(node, options) {
         return request({ 
@@ -56,20 +54,29 @@ class Orquestador{
     
     getValue(key){
         var node = this.getNodeByKey(key);
-        return this._requestNode({
+        return this._requestNode(node,{
             method: "GET",
-            resource: key,
+            resource: key
           });
     }
 
     assignKeyAndValue(body){
         var node = this.getNodeByKey(body.key);
-        return this._requestNode({
+        return this._requestNode(node,{
             method: "GET",
             resource: "",
             json: body
           });
     }
+
+    getByCondition(node,condition,value){
+        return this._requestNode(node, {
+            method: "GET",
+            resource: condition+"/"+value
+          });
+    }
+
+    
     
 }
 
