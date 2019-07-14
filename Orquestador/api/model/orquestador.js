@@ -69,14 +69,19 @@ class Orquestador{
           });
     }
 
-    getByCondition(node,condition,value){
-        return this._requestNode(node, {
-            method: "GET",
-            resource: condition+"/"+value
-          });
+    getValuesByCondition(condition,value){
+        return Promise.map(this.nodes, function(node){ 
+            this._requestNode(node, {
+                method: "GET",
+                resource: condition+"/"+value
+            });
+        })
+        .then(_.flatten);
     }
 
-    
+    getHighThan(value){
+        return getValuesByCondition("mayor",value);
+    }
     
 }
 
