@@ -22,6 +22,7 @@ class Orquestador {
     const node = this.nodes.shift();
     if(_.isUndefined(node))
       return Promise.reject("Se murieron todos los nodos");
+    // VER SI YA EXISTE
     return node.write(pair)
       .tap(() => this.nodes.push(node))
       .catch(() => this.assignKeyAndValue(pair)) // TODO: catchear exception del retry

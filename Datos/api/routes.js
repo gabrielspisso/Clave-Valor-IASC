@@ -14,11 +14,10 @@ app.use(logRequestStart)
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
-route.get('/:key', controller.obtenerValorDeClave);
-route.post('/', controller.escribirValor);
+
 route.get('/mayor/:value', controller.obtenerValoresMayoresA);
 route.get('/menor/:value', controller.obtenerValoresMenoresA);
-
-
+route.get('/:key', controller.obtenerValorDeClave);
+route.post('/', controller.escribirValor);
 
 app.listen(PORT, () => console.log(`Server running at port ${PORT}`));

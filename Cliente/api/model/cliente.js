@@ -48,11 +48,11 @@ class Cliente {
   }
 
   obtenerMayoresA(valor) {
-    return  obtenerValorSegunCriterio("mayorA",valor)
+    return  this.obtenerValorSegunCriterio("mayor",valor)
   }
 
   obtenerMenoresA(valor) {
-    return  obtenerValorSegunCriterio("menorA",valor)
+    return  this.obtenerValorSegunCriterio("menor",valor)
   }
   
   obtenerValorSegunCriterio(criterio,valor) {

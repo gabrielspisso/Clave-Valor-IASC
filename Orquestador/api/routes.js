@@ -16,9 +16,9 @@ app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 route.get('/master', controller.esMaster);
 app.use((req, res, next) => controller.esMaster() ? next() : res.sendStatus(400));
-route.get('/:key', controller.obtenerValor);
 route.get('/mayor', controller.mayorA)
 route.get('/menor', controller.menorA);
+route.get('/:key', controller.obtenerValor);
 route.post('/', controller.crearValor);
 
 
