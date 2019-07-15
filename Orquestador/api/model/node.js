@@ -1,4 +1,5 @@
 const request = require("request-promise");
+const retry = require('promise-retry');
 
 class Node {
   
@@ -31,11 +32,11 @@ class Node {
   }
 
   _request(options) {
-    return request({ 
+    return retry(() => request({ 
         uri: `${this.domain}/${options.resource}`,
         timeout: 10000,
         ...options
-    })
+    }), 3)
   }
        
 }
