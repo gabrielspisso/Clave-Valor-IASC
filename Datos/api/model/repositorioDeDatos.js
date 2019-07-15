@@ -16,6 +16,7 @@ class RepositorioDeDatos {
     escribirValor({ clave, valor }) {
 
         this.validarTamanioDeClave(clave);
+        this.validarTamanioDeValor(valor);
 
         let par = this.encontrarValor(clave);
         if (par) {
@@ -26,10 +27,14 @@ class RepositorioDeDatos {
         }
 
     }
-
+    validarTamanioDeValor(valor){
+        if(_.size(valor) > config.tamanioMaximoDeUnValor ){
+            throw new TamanioInvalido;
+        }
+    }
     validarTamanioDeClave(clave){    
         if(_.size(clave) > config.tamanioMaximoDeClave ){
-            throw new TamanioInvalido("clave");
+            throw new TamanioInvalido;
         }
     }
 

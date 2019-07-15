@@ -26,6 +26,13 @@ describe("repositorioDeDatos", () => {
                 return escribirUnaClaveMuyLarga.should.throw(TamanioInvalido);
             })
             
+            it("Un valor no puede exceder el tamaño maximo por configuracion.", () => {
+                const valorLargo  = "x".repeat(config.tamanioMaximoDeUnValor + 1);
+                const escribirUnaClaveMuyLarga = () => repositorioDeDatos.escribirValor({ clave: '1', valor: valorLargo });
+                return escribirUnaClaveMuyLarga.should.throw(TamanioInvalido);
+            })
+
+            
         })
         describe("Pedidos sobre una escritura", () => {
             beforeEach(() => {
