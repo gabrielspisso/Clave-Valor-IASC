@@ -35,7 +35,6 @@ class Node {
   _request(options) {
     return Promise.resolve(retry(() => request({ 
         uri: `${this.domain}/${options.resource}`,
-        timeout: 10000,
         ...options
     }), 3))
   }

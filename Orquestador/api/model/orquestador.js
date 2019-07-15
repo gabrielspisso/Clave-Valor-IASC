@@ -2,6 +2,8 @@ const _ = require("lodash");
 const Promise = require("bluebird");
 const config = require("../../config");
 const Node = require("./node")
+const NotFound = require("./exceptions/notFound");
+const NoDataNodesLeft = require("./exceptions/noDataNodesLeft");
 
 class Orquestador {
 
@@ -11,17 +13,15 @@ class Orquestador {
   }
   
   getValue(key) {
-    return Promise.map(this.nodes, it => it.getByKey(key).reflect())
-      .filter(it => it.isFulfilled())
+    return this._safeGet(it => it.getByKey(key).reflect())
       .get(0) 
-      .then(it => it.value())
+      .tap((it) => this._throwIfUndefined(it, NotFound))
       .then(({ valor }) => ({ key, value: valor }));
   }
 
   assignKeyAndValue(pair) {
     const node = this.nodes.shift();
-    if(_.isUndefined(node))
-      return Promise.reject("Se murieron todos los nodos");
+    this._throwIfUndefined(node, NoDataNodesLeft);
     // VER SI YA EXISTE
     return node.write(pair)
       .tap(() => this.nodes.push(node))
@@ -29,11 +29,11 @@ class Orquestador {
   }
 
   getHighThan(value) {
-    return this._getRangeBy(it => it.getHigherThan(value));
+    return this._getRangeBy(it => it.getHigherThan(value).reflect());
   }
 
   getLessThan(value) {
-    return this._getRangeBy(it => it.getLesserThan(value));
+    return this._getRangeBy(it => it.getLesserThan(value).reflect());
   }
 
   setIsMaster(value) {
@@ -41,10 +41,21 @@ class Orquestador {
     this.isMaster = value;
   }
 
+  _throwIfUndefined(value, Err) {
+    if(_.isUndefined(value))
+      throw new Err()
+  }
+
   _getRangeBy(getter) {
-    return Promise.map(this.nodes, getter)
+    return this._safeGet(getter)
       .then(_.flatten)
       .then(it => ({ values: it }));
+  }
+
+  _safeGet(getter) {
+    return Promise.map(this.nodes, getter)
+      .filter(it => it.isFulfilled())
+      .map(it => it.value())
   }
   
 }

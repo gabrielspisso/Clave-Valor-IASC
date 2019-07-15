@@ -3,6 +3,7 @@ const Promise = require("bluebird");
 const request = require("request-promise");
 const config = require("../../config");
 const NoHayMaster = require("./exceptions/noHayMaster");
+const ErrorExterno = require("./exceptions/errorExterno");
 
 class Cliente {
 
@@ -79,7 +80,8 @@ class Cliente {
       .then(master => request({ 
         uri: `${master}/${options.resource}`,
         ...options
-      }));
+      }))
+      .catch(it => { throw new ErrorExterno(it) })
   }
 
 
