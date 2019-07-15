@@ -14,6 +14,12 @@ class Orquestador {
       .then(({ valor }) => { key, value: valor });
   }
 
+  assignKeyAndValue(pair) {
+    const node = this.nodes.shift();
+    return node.write(pair)
+      .tap(() => this.nodes.push(node))
+  }
+
   getHighThan(value) {
     return this._getRangeBy(it => it.getHigherThan(value));
   }
