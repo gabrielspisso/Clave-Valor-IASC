@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests --recursive --require=test-vars.js "
+    "test": "mocha tests --recursive ",
+    "start": "node index.js"
   },
   "author": "",
   "license": "MIT",

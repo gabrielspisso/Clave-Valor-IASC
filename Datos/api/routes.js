@@ -2,7 +2,7 @@ const app = require('express')();
 const controller = require('./controller');
 const bodyParser = require('body-parser');
 const { route } = require("endpoint-handler")(app);
-const PORT = process.env.PORT || 9001;
+const PORT = process.env.DATAPORT || 9001;
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
