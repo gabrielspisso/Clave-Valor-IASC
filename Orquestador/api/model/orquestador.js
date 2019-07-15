@@ -12,7 +12,7 @@ class Orquestador {
   
   getValue(key) {
     return Promise.any(this.nodes, it => it.getByKey(key))
-      .then(({ valor }) => { key, value: valor });
+      .then(({ valor }) => ({ key, value: valor }));
   }
 
   assignKeyAndValue(pair) {

@@ -1,6 +1,6 @@
 const app = require('express')();
 const controller = require("./controller");
-const PORT = process.env.PORT || 9001;
+const PORT = process.env.PORT || 9000;
 const { route } = require("endpoint-handler")(app);
 
 route.get('/:key', controller.obtenerValor);
