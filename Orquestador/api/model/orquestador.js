@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const Promise = require("bluebird");
 const config = require("../../config");
+const Node = require("./node")
 
 class Orquestador {
 
