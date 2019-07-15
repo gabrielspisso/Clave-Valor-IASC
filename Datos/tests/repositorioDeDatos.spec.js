@@ -1,5 +1,7 @@
 const RepositorioDeDatos = require("../api/model/repositorioDeDatos");
 const should = require("should");
+const config = require("../config");
+const TamanioInvalido = require("../api/model/exceptions/TamanioInvalido");
 
 describe("repositorioDeDatos", () => {
     beforeEach(() => {
@@ -15,18 +17,34 @@ describe("repositorioDeDatos", () => {
     })
 
     describe("Escribir datos", () => {
-        beforeEach(() => {
-            repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });
+
+        describe("Escrituras invalidas debido a su tamaño", () => {
+
+            it("Una clave no puede exceder el tamaño maximo por configuracion.", () => {
+                const claveLarga  = "x".repeat(config.tamanioMaximoDeClave + 1);
+                const escribirUnaClaveMuyLarga = () => repositorioDeDatos.escribirValor({ clave: claveLarga, valor: '11111' });
+                return escribirUnaClaveMuyLarga.should.throw(TamanioInvalido);
+            })
+            
         })
-        it("Despues de escribir un valor dos veces, al pedir por la clave se obtiene el segundo valor", () => {
-            repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y2' });
-            return repositorioDeDatos.obtenerValor('x').should.be.eql('y2')
-        })
-        it("Despues de escribir un valor, al pedir por la clave se obtiene el valor correcto", () => {
-            return repositorioDeDatos.obtenerValor('x').should.be.eql('y')
+        describe("Pedidos sobre una escritura", () => {
+            beforeEach(() => {
+                repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });
+            })
+    
+            it("Despues de escribir un valor dos veces, al pedir por la clave se obtiene el segundo valor", () => {
+                repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y2' });
+                return repositorioDeDatos.obtenerValor('x').should.be.eql('y2')
+            })
+    
+            it("Despues de escribir un valor, al pedir por la clave se obtiene el valor correcto", () => {
+                return repositorioDeDatos.obtenerValor('x').should.be.eql('y')
+            })
+    
         })
     });
 
+  
     describe("Obtener valor mayor a otro valor", () => {
         it("Puede devolver una lista vacia", () => {
             repositorioDeDatos.escribirValor({ clave: 'x', valor: 'y' });

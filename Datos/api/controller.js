@@ -5,6 +5,7 @@ class Controller {
         this.repositorioDeDatos = new RepositorioDeDatos();
         _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA"])
     }
+    
     obtenerValorDeClave({ params: { key } }, response) {
         let valor = this.repositorioDeDatos.obtenerValor(key);
         if (valor) {
@@ -16,17 +17,25 @@ class Controller {
     }
 
     escribirValor({ body }, res) {
-        if (this.bodyValido(body)) {
+        try{
+            this.validarBody(body);
             this.repositorioDeDatos.escribirValor(body);
             res.sendStatus(200);
         }
-        else {
+        catch(error){
             res.sendStatus(400);
         }
+       
     }
 
-    bodyValido(par) {
-        return par && par.clave && par.valor;
+    bodyValido(par){
+        return par && par.clave && par.valor
+    }
+
+    validarBody(par) {
+        if(!this.bodyValido(par)){
+            throw new Error("No es un par valido");
+        };
     }
 
     obtenerValoresMayoresA({ params: { value } }, res) {

@@ -1,4 +1,7 @@
 const _ = require("lodash");
+const config = require("../../config");
+const TamanioInvalido = require("./exceptions/TamanioInvalido");
+
 class RepositorioDeDatos {
 
     constructor() {
@@ -11,12 +14,22 @@ class RepositorioDeDatos {
     }
 
     escribirValor({ clave, valor }) {
+
+        this.validarTamanioDeClave(clave);
+
         let par = this.encontrarValor(clave);
         if (par) {
             par.valor = valor;
         }
         else {
             this.datos.push({ clave, valor });
+        }
+
+    }
+
+    validarTamanioDeClave(clave){    
+        if(_.size(clave) > config.tamanioMaximoDeClave ){
+            throw new TamanioInvalido("clave");
         }
     }
 
