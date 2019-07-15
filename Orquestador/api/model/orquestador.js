@@ -32,6 +32,10 @@ class Orquestador {
     return this._getRangeBy(it => it.getLesserThan(value));
   }
 
+  setIsMaster(value) {
+    this.isMaster = value;
+  }
+
   _getRangeBy(getter) {
     return Promise.map(this.nodes, getter)
       .then(_.flatten);
@@ -40,4 +44,4 @@ class Orquestador {
   
 }
 
-module.exports = Orquestador;
+module.exports = new Orquestador();

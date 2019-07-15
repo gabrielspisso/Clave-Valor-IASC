@@ -1,2 +1,4 @@
-require("./api/routes")
-const supervisorConnection = require("./sockets")
+require("./api/routes");
+const setUpSupervisorConnection = require("./sockets");
+
+setUpSupervisorConnection()

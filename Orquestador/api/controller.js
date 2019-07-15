@@ -1,10 +1,10 @@
 const _ = require('lodash');
-const Orquestador = require('./model/orquestador');
+const orquestador = require('./model/orquestador');
 
 class Controller {
 
   constructor() {
-    this.orquestador = new Orquestador();
+    this.orquestador = orquestador;
     _.bindAll(this, ["obtenerValor", "mayorA", "menorA", "crearValor", "esMaster"]);
   }
 
