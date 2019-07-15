@@ -27,13 +27,17 @@ class RepositorioDeDatos {
         }
 
     }
-    validarTamanioDeValor(valor){
-        if(_.size(valor) > config.tamanioMaximoDeUnValor ){
-            throw new TamanioInvalido;
-        }
+
+    validarTamanioDeValor(valor) {
+        this.validarTamanio(valor, config.tamanioMaximoDeUnValor)
     }
-    validarTamanioDeClave(clave){    
-        if(_.size(clave) > config.tamanioMaximoDeClave ){
+
+    validarTamanioDeClave(clave) {
+        this.validarTamanio(clave, config.tamanioMaximoDeClave);
+    }
+    
+    validarTamanio(campo, valorMaximo) {
+        if (_.size(campo) > valorMaximo) {
             throw new TamanioInvalido;
         }
     }
@@ -43,16 +47,16 @@ class RepositorioDeDatos {
     }
 
     obtenerValoresMayoresA(unValor) {
-        return this.obtenerValoresSegunCriterio(( valor ) => valor > unValor)
+        return this.obtenerValoresSegunCriterio((valor) => valor > unValor)
     }
 
     obtenerValoresMenoresA(unValor) {
-        return this.obtenerValoresSegunCriterio(  valor => valor < unValor)
+        return this.obtenerValoresSegunCriterio(valor => valor < unValor)
     }
 
     obtenerValoresSegunCriterio(criterio) {
         return this.datos.filter(({ valor }) => criterio(valor))
-                .map(dato => dato.valor)
+            .map(dato => dato.valor)
     }
 
 
