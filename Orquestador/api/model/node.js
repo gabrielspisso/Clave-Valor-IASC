@@ -1,5 +1,6 @@
 const request = require("request-promise");
 const retry = require('promise-retry');
+const Promise = require("bluebird");
 
 class Node {
   
@@ -24,7 +25,7 @@ class Node {
   }
 
   get(resource) {
-    return this._request({ method: "GET", resource });
+    return this._request({ method: "GET", resource, json: true });
   }  
 
   post(resource, json) {
@@ -32,11 +33,11 @@ class Node {
   }
 
   _request(options) {
-    return retry(() => request({ 
+    return Promise.resolve(retry(() => request({ 
         uri: `${this.domain}/${options.resource}`,
         timeout: 10000,
         ...options
-    }), 3)
+    }), 3))
   }
        
 }

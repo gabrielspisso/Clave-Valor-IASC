@@ -25,7 +25,7 @@ class Controller {
   }
 
   esMaster(){
-    return this.orquestador.isMaster;
+    return  Promise.resolve({ esMaster: this.orquestador.isMaster });
   }
 
 }

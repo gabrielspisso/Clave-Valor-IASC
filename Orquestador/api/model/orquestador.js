@@ -11,7 +11,10 @@ class Orquestador {
   }
   
   getValue(key) {
-    return Promise.any(this.nodes, it => it.getByKey(key))
+    return Promise.map(this.nodes, it => it.getByKey(key).reflect())
+      .filter(it => it.isFulfilled())
+      .get(0) 
+      .then(it => it.value())
       .then(({ valor }) => ({ key, value: valor }));
   }
 
@@ -33,6 +36,7 @@ class Orquestador {
   }
 
   setIsMaster(value) {
+    console.log("soy el maestro", value)
     this.isMaster = value;
   }
 

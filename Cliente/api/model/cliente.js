@@ -17,7 +17,7 @@ class Cliente {
 
   buscarMaster() {
     if(!_.isUndefined(this.master))
-      return;
+      return Promise.resolve();
     return Promise.filter(this.orquestadores, this.esMaster, { concurrency: 10 })
       .get(0)
       .tap(this._throwIfUndefined)
