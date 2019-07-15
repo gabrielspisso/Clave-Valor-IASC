@@ -41,4 +41,4 @@ class Node {
        
 }
 
-module.exports = Orquestador;
+module.exports = Node;
