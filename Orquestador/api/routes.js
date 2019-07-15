@@ -1,12 +1,13 @@
 const app = require('express')();
 const controller = require("./controller");
 const PORT = process.env.PORT || 9001;
+const { route } = require("endpoint-handler")(app);
 
-app.get('/:key', controller.obtenerValor);
-app.get('/mayor', controller.mayorA)
-app.get('/menor', controller.menorA);
-app.post('/crearValor', controller.crearValor);
-app.post('/esMaster', controller.esMaster);
+route.get('/:key', controller.obtenerValor);
+route.get('/mayor', controller.mayorA)
+route.get('/menor', controller.menorA);
+route.post('/crearValor', controller.crearValor);
+route.get('/esMaster', controller.esMaster);
 
 
 app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
