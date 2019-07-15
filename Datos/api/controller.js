@@ -33,7 +33,6 @@ class Controller {
     }
 
     obtenerValoresMayoresA({ params: { value } }, res) {
-        console.log("EEE", this.repositorioDeDatos.obtenerValoresMayoresA(value))
         Promise.resolve(this.repositorioDeDatos.obtenerValoresMayoresA(value));
     }
 
