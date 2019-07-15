@@ -38,8 +38,8 @@ class Orquestador {
 
   _getRangeBy(getter) {
     return Promise.map(this.nodes, getter)
-      .then(_.flatten);
-      .then(it => ({ values: it }))
+      .then(_.flatten)
+      .then(it => ({ values: it }));
   }
   
 }
