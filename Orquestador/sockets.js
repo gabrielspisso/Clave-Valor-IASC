@@ -1,6 +1,6 @@
 const io = require('socket.io-client');
 const { supervisorDomain } = require("./config");
-const orquestador = require("./model/orquestador");
+const orquestador = require("./api/model/orquestador");
 const socket = io(supervisorDomain);
 
 setUpSupervisorConnection = () => 
