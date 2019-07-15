@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const config = require("../../config");
+const Promise = require("bluebird");
 const TamanioInvalido = require("./exceptions/TamanioInvalido");
 
 class RepositorioDeDatos {

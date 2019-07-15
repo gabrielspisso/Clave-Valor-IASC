@@ -1,11 +1,14 @@
 const RepositorioDeDatos = require('./model/repositorioDeDatos');
+const BodyInvalido = require('./model/exceptions/BodyInvalido');
+const Promise = require("bluebird");
 const _ = require("lodash");
+
 class Controller {
     constructor() {
         this.repositorioDeDatos = new RepositorioDeDatos();
-        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA"])
+        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA","validarBody"])
     }
-    
+
     obtenerValorDeClave({ params: { key } }, response) {
         let valor = this.repositorioDeDatos.obtenerValor(key);
         if (valor) {
@@ -17,24 +20,17 @@ class Controller {
     }
 
     escribirValor({ body }, res) {
-        try{
-            this.validarBody(body);
-            this.repositorioDeDatos.escribirValor(body);
-            res.sendStatus(200);
-        }
-        catch(error){
-            res.sendStatus(400);
-        }
-       
+        return Promise.method(this.validarBody)(body)
+            .then(this.repositorioDeDatos.escribirValor(body))
     }
 
-    bodyValido(par){
+    bodyValido(par) {
         return par && par.clave && par.valor
     }
 
     validarBody(par) {
-        if(!this.bodyValido(par)){
-            throw new Error("No es un par valido");
+        if (!this.bodyValido(par)) {
+            throw new BodyInvalido;
         };
     }
 
