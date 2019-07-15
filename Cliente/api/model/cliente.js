@@ -43,7 +43,8 @@ class Cliente {
   obtenerValor(key) {
     return this._requestMaster({
       method: "GET",
-      resource: `${key}`
+      resource: `${key}`,
+      json: true
     });
   }
 
@@ -59,7 +60,8 @@ class Cliente {
     return this._requestMaster({
       method: "GET",
       resource: criterio,
-      qs: { valor }
+      qs: { valor },
+      json: true
     });
   }
   
