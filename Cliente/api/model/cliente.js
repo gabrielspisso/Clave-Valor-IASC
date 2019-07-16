@@ -66,6 +66,12 @@ class Cliente {
     });
   }
   
+  borrarPar(key) {
+    return this._requestMaster({
+      method: "DELETE",
+      resource: key,
+    });
+  }
 
   crearValor(par) {
     return this._requestMaster({
