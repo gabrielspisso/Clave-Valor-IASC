@@ -43,17 +43,16 @@ class Orquestador {
   }
 
   removePair(key) {
-    return this._mapSafely(it => it.removePair(key).reflect())
+    return Promise.filter(it => it.removePair(key).thenReturn(true).catchReturn(false))
+      .get(0)
+      .then(node => this.writeNodes.concat(node))
+      .tap(nodes => this.writeNodes = _.uniqBy(nodes, "domain"))
   }
 
   _handleWriteError({ statusCode, node }, pair) {
-    if(statusCode == 409)
-      _.remove(this.writeNodes, { domain: node.domain })
-    else
-    {
-      _.remove(this.writeNodes, { domain: node.domain })
+    _.remove(this.writeNodes, { domain: node.domain })
+    if(statusCode != 409)
       _.remove(this.readNodes, { domain: node.domain })
-    }
     return this.assignKeyAndValue(pair);
   }
 
