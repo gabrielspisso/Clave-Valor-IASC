@@ -1,4 +1,4 @@
-class BodyInvalido extends Error {
+class NodoCompleto extends Error {
     constructor(err) {
       super()
       this.statusCode = 409;
@@ -9,4 +9,4 @@ class BodyInvalido extends Error {
     }
   };
   
-  module.exports = BodyInvalido;
+  module.exports = NodoCompleto;
