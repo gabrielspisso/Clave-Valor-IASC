@@ -1,6 +1,5 @@
-class TamanioValido extends Error {
+class TamanioValido {
   constructor(err) {
-    super()
     this.statusCode = 400;
     this.body = {
       err,
@@ -10,3 +9,5 @@ class TamanioValido extends Error {
 };
 
 module.exports = TamanioValido;
+
+TamanioValido.prototype = Object.create(Error.prototype);

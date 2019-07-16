@@ -1,6 +1,5 @@
-class NoDataNodesLeft extends Error {
+class NoDataNodesLeft {
   constructor(err) {
-    super()
     this.statusCode = 500;
     this.body = {
       err,
@@ -10,3 +9,5 @@ class NoDataNodesLeft extends Error {
 };
 
 module.exports = NoDataNodesLeft;
+
+NoDataNodesLeft.prototype = Object.create(Error.prototype);

@@ -1,6 +1,5 @@
-class NotFound extends Error {
+class NotFound {
     constructor(err) {
-      super()
       this.statusCode = 404;
       this.body = {
         err,
@@ -10,3 +9,5 @@ class NotFound extends Error {
   };
   
   module.exports = NotFound;
+
+  NotFound.prototype = Object.create(Error.prototype);

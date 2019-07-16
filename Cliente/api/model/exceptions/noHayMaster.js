@@ -1,6 +1,5 @@
-class NoHayMaster extends Error {
+class NoHayMaster {
   constructor(err) {
-    super()
     this.statusCode = 500;
     this.body = {
       err,
@@ -10,3 +9,4 @@ class NoHayMaster extends Error {
 };
 
 module.exports = NoHayMaster;
+NoHayMaster.prototype = Object.create(Error.prototype);
