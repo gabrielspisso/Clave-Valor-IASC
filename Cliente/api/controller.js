@@ -8,6 +8,7 @@ class Controller {
     this.mayorA = this.mayorA.bind(this);
     this.menorA = this.menorA.bind(this);
     this.crearValor = this.crearValor.bind(this);
+    this.borrarPar = this.borrarPar.bind(this);
   }
 
   obtenerValor({ params: { key } }) {
@@ -24,6 +25,10 @@ class Controller {
 
   crearValor({ body }) {
     return this.cliente.crearValor(body);
+  }
+
+  borrarPar({ params: { key } }) {
+    return this.cliente.borrarPar(key);
   }
 
 }

@@ -8,12 +8,11 @@ const _ = require("lodash");
 class Controller {
     constructor() {
         this.repositorioDeDatos = new RepositorioDeDatos();
-        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA", "validarBody"])
+        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA", "validarBody", "borrarPar"])
     }
 
-    obtenerValorDeClave({ params: { key } }, res) {
-        return Promise.resolve(this.repositorioDeDatos.obtenerValor(key))
-            .tap((valor) => { if (_.isUndefined(valor)) throw new NotFound() })
+    obtenerValorDeClave({ params: { key } }) {
+        return this._getOrThrow(key)
             .then((valor) => { valor });
     }
 
@@ -38,6 +37,16 @@ class Controller {
 
     obtenerValoresMenoresA({ params: { value } }, res) {
         return Promise.resolve(this.repositorioDeDatos.obtenerValoresMenoresA(value));
+    }
+
+    borrarPar({ params: { key } }) {
+        return this._getOrThrow(key)
+            .then((valor) => this.repositorioDeDatos.borrarPar(key));
+    }
+
+    _getOrThrow(key) {
+        return Promise.resolve(this.repositorioDeDatos.obtenerValor(key))
+            .tap((valor) => { if (_.isUndefined(valor)) throw new NotFound() })
     }
 }
 

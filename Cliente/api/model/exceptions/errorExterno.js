@@ -1,6 +1,5 @@
-class ErrorExterno extends Error {
+class ErrorExterno {
   constructor({ statusCode, error: { message }}) {
-    super()
     this.statusCode = statusCode;
     this.body = {
       message
@@ -9,3 +8,4 @@ class ErrorExterno extends Error {
 };
 
 module.exports = ErrorExterno;
+ErrorExterno.prototype = Object.create(Error.prototype);

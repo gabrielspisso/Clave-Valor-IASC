@@ -5,7 +5,7 @@ class Controller {
 
   constructor() {
     this.orquestador = orquestador;
-    _.bindAll(this, ["obtenerValor", "mayorA", "menorA", "crearValor", "esMaster"]);
+    _.bindAll(this, ["obtenerValor", "mayorA", "menorA", "crearValor", "esMaster", "borrarPar"]);
   }
 
   obtenerValor({ params: { key } }) {
@@ -22,6 +22,10 @@ class Controller {
 
   crearValor({ body }) {
     return this.orquestador.assignKeyAndValue(body);
+  }
+
+  borrarPar({ params: { key } }) {
+    return this.orquestador.removePair(key);
   }
 
   esMaster(){

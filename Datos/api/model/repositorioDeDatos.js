@@ -48,6 +48,10 @@ class RepositorioDeDatos {
         }
     }
 
+    borrarPar(clave) {
+        _.remove(this.datos, { clave });
+    }
+
     encontrarValor(clave) {
         return _.find(this.datos, { clave });
     }

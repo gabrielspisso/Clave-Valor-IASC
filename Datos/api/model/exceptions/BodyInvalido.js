@@ -1,6 +1,5 @@
-class BodyInvalido extends Error {
+class BodyInvalido {
     constructor(err) {
-      super()
       this.statusCode = 400;
       this.body = {
         err,
@@ -9,4 +8,4 @@ class BodyInvalido extends Error {
     }
   };
   
-  module.exports = BodyInvalido;
+  BodyInvalido.prototype = Object.create(Error.prototype);
