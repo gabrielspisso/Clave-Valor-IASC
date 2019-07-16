@@ -16,7 +16,7 @@ class RepositorioDeDatos {
     }
 
     escribirValor({ clave, valor }) {
-        this.validarCapacidadTotal();
+        this.validarCapacidadTotal(clave);
         this.validarTamanioDeClave(clave);
         this.validarTamanioDeValor(valor);
 
@@ -29,8 +29,8 @@ class RepositorioDeDatos {
         }
 
     }
-    validarCapacidadTotal(){
-        if(_.size(this.datos) == config.capacidadMaxima){
+    validarCapacidadTotal(clave){       
+        if(!_.some(this.datos, { clave }) && _.size(this.datos) == config.capacidadMaxima){
             throw new NodoCompleto;
         }
     }
