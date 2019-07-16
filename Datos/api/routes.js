@@ -19,7 +19,6 @@ route.get('/mayor/:value', controller.obtenerValoresMayoresA);
 route.get('/menor/:value', controller.obtenerValoresMenoresA);
 route.get('/:key', controller.obtenerValorDeClave);
 route.post('/', controller.escribirValor);
-route.post('/', controller.escribirValor);
 route.delete('/:key', controller.borrarPar);
 
 app.listen(PORT, () => console.log(`Server running at port ${PORT}`));
