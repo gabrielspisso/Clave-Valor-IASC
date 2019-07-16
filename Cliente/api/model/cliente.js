@@ -3,6 +3,7 @@ const Promise = require("bluebird");
 const request = require("request-promise");
 const config = require("../../config");
 const NoHayMaster = require("./exceptions/noHayMaster");
+const ErrorExterno = require("./exceptions/errorExterno");
 
 class Cliente {
 
@@ -17,7 +18,7 @@ class Cliente {
 
   buscarMaster() {
     if(!_.isUndefined(this.master))
-      return;
+      return Promise.resolve();
     return Promise.filter(this.orquestadores, this.esMaster, { concurrency: 10 })
       .get(0)
       .tap(this._throwIfUndefined)
@@ -43,23 +44,25 @@ class Cliente {
   obtenerValor(key) {
     return this._requestMaster({
       method: "GET",
-      resource: `${key}`
+      resource: `${key}`,
+      json: true
     });
   }
 
   obtenerMayoresA(valor) {
-    return  obtenerValorSegunCriterio("mayorA",valor)
+    return  this.obtenerValorSegunCriterio("mayor",valor)
   }
 
   obtenerMenoresA(valor) {
-    return  obtenerValorSegunCriterio("menorA",valor)
+    return  this.obtenerValorSegunCriterio("menor",valor)
   }
   
   obtenerValorSegunCriterio(criterio,valor) {
     return this._requestMaster({
       method: "GET",
       resource: criterio,
-      qs: { valor }
+      qs: { valor },
+      json: true
     });
   }
   
@@ -77,7 +80,8 @@ class Cliente {
       .then(master => request({ 
         uri: `${master}/${options.resource}`,
         ...options
-      }));
+      }))
+      .catch(it => { throw new ErrorExterno(it) })
   }
 
 

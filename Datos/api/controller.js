@@ -33,7 +33,7 @@ class Controller {
     }
 
     obtenerValoresMayoresA({ params: { value } }, res) {
-        return Promise.resolve(this.repositorioDeDatos.obtenerValoresMayoresA(value));
+        Promise.resolve(this.repositorioDeDatos.obtenerValoresMayoresA(value));
     }
 
     obtenerValoresMenoresA({ params: { value } }, res) {
