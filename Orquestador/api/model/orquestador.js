@@ -13,30 +13,10 @@ class Orquestador {
   }
 
   getValue(key) {
-    return this._safeGet(it => it.getByKey(key).reflect())
-      .get(0)
+    return this._mapSafely(it => it.getByKey(key).reflect())
+      .get(0) 
       .tap((it) => this._throwIfUndefined(it, NotFound))
       .then(({ valor }) => ({ key, value: valor }));
-  }
-
-  assignKeyAndValue(pair) {
-    let nodes = _.clone(this.nodes);
-    return this.write(pair, nodes);
-  }
-
-  write(pair, nodes) {
-    const node = nodes.shift();
-    this._throwIfUndefined(node, NoDataNodesLeft);
-    return node.write(pair)
-      .tap(() => _.remove(this.nodes, node))
-      .tap(() => this.nodes.push(node))
-      .catch((error) => {
-        if (error.statusCode == 500) {
-          _.remove(this.nodes, node);
-        }
-        return this.write(pair, nodes)
-      })
-
   }
 
   getHighThan(value) {
@@ -52,19 +32,23 @@ class Orquestador {
     this.isMaster = value;
   }
 
+  removePair(key) {
+    return this._mapSafely(it => it.removePair(key).reflect())
+  }
+
   _throwIfUndefined(value, Err) {
     if (_.isUndefined(value))
       throw new Err()
   }
 
   _getRangeBy(getter) {
-    return this._safeGet(getter)
+    return this._mapSafely(getter)
       .then(_.flatten)
       .then(it => ({ values: it }));
   }
 
-  _safeGet(getter) {
-    return Promise.map(this.nodes, getter)
+  _mapSafely(request) {
+    return Promise.map(this.nodes, request)
       .filter(it => it.isFulfilled())
       .map(it => it.value())
   }
