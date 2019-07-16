@@ -22,14 +22,18 @@ class Orquestador {
   assignKeyAndValue(pair) {
     const node = this.nodes.shift();
     this._throwIfUndefined(node, NoDataNodesLeft);
-    // VER SI YA EXISTE
     return node.write(pair)
       .tap(() => this.nodes.push(node))
       .catch((error) => {
-        if (error.status == 409) {
+        console.log(this.nodes);
+        console.log(error.statusCode);
+        if (error.statusCode == 409) {
           this.nodes.push(node);
         }
-      }).then(() => this.assignKeyAndValue(pair))
+        console.log(this.nodes);
+
+        this.assignKeyAndValue(pair)
+      });
   }
 
   getHighThan(value) {
