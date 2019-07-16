@@ -45,8 +45,11 @@ class Orquestador {
   removePair(key) {
     return Promise.filter(this.readNodes, it => it.removePair(key).thenReturn(true).catchReturn(false))
       .get(0)
-      .then(node => this.writeNodes.concat(node))
-      .tap(nodes => this.writeNodes = _.uniqBy(nodes, "domain"))
+      .tap(node => {
+        const nodes = this.writeNodes.concat(node)
+        this.writeNodes = _.uniqBy(nodes, "domain")
+      })
+      .thenReturn()
   }
 
   _handleWriteError({ statusCode, node }, pair) {
