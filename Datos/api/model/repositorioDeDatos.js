@@ -2,6 +2,7 @@ const _ = require("lodash");
 const config = require("../../config");
 const Promise = require("bluebird");
 const TamanioInvalido = require("./exceptions/TamanioInvalido");
+const NodoCompleto = require("./exceptions/NodoCompleto");
 
 class RepositorioDeDatos {
 
@@ -15,7 +16,7 @@ class RepositorioDeDatos {
     }
 
     escribirValor({ clave, valor }) {
-
+        this.validarCapacidadTotal();
         this.validarTamanioDeClave(clave);
         this.validarTamanioDeValor(valor);
 
@@ -28,8 +29,12 @@ class RepositorioDeDatos {
         }
 
     }
-
-    validarTamanioDeValor(valor) {
+    validarCapacidadTotal(){
+        if(_.size(this.datos) == config.capacidadMaxima){
+            throw new NodoCompleto;
+        }
+    }
+    validarTamanioDeValor(valor) {   
         this.validarTamanio(valor, config.tamanioMaximoDeUnValor)
     }
 
