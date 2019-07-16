@@ -3,7 +3,9 @@ const { supervisorDomain } = require("./config");
 const orquestador = require("./api/model/orquestador");
 const socket = io(supervisorDomain);
 
-setUpSupervisorConnection = () => 
+setUpSupervisorConnection = () => {
+  socket.on("connect", () => orquestador.setIsMaster(false));
   socket.on("master", () => orquestador.setIsMaster(true));
+}
 
 module.exports = setUpSupervisorConnection;
