@@ -17,7 +17,7 @@ class Node {
   }
 
   getByKey(key) {
-    return this.get(key);
+    return this.get(key)
   }
 
   write(pair) {

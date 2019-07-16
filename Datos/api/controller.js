@@ -14,7 +14,7 @@ class Controller {
     obtenerValorDeClave({ params: { key } }, res) {
         return Promise.resolve(this.repositorioDeDatos.obtenerValor(key))
             .tap((valor) => { if (_.isUndefined(valor)) throw new NotFound() })
-            .then((valor) => { valor });
+            .then((valor) => ({ valor }));
     }
 
     escribirValor({ body }, res) {

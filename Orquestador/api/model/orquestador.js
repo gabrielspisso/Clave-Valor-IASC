@@ -19,6 +19,14 @@ class Orquestador {
       .then(({ valor }) => ({ key, value: valor }));
   }
 
+  assignKeyAndValue(pair) {
+    return this._findCorrectNodeIfExists(pair)
+      .then(node => node || this._pickNodeRoundRobin())
+      .tap(node => this._throwIfUndefined(node, NoDataNodesLeft))
+      .then(node => node.write(pair))
+      .catch(() => this.assignKeyAndValue(pair)) // TODO: catchear exception del retry
+  }
+
   getHighThan(value) {
     return this._getRangeBy(it => it.getHigherThan(value).reflect());
   }
@@ -34,6 +42,18 @@ class Orquestador {
 
   removePair(key) {
     return this._mapSafely(it => it.removePair(key).reflect())
+  }
+
+  _findCorrectNodeIfExists({ clave }) {
+    return Promise.filter(this.nodes, it => it.getByKey(clave).thenReturn(true).catchReturn(false))
+      .get(0)
+
+  }
+
+  _pickNodeRoundRobin() {
+    const node = this.nodes.shift();
+    this.nodes.push(node);
+    return node;
   }
 
   _throwIfUndefined(value, Err) {
