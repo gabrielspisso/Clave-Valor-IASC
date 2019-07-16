@@ -30,21 +30,15 @@ class RepositorioDeDatos {
 
     }
     validarCapacidadTotal(){
-        console.log('AAAA',_.size(this.datos));
-        console.log('BBBB',config.capacidadMaxima);
-        console.log('CCC',config.tamanioMaximoDeUnValor)
-        
         if(_.size(this.datos) == config.capacidadMaxima){
             throw new NodoCompleto;
         }
     }
     validarTamanioDeValor(valor) {   
-        console.log(config.tamanioMaximoDeUnValor)
         this.validarTamanio(valor, config.tamanioMaximoDeUnValor)
     }
 
     validarTamanioDeClave(clave) {
-        console.log(config.tamanioMaximoDeClave)
         this.validarTamanio(clave, config.tamanioMaximoDeClave);
     }
     
