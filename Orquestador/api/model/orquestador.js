@@ -43,7 +43,7 @@ class Orquestador {
   }
 
   removePair(key) {
-    return Promise.filter(it => it.removePair(key).thenReturn(true).catchReturn(false))
+    return Promise.filter(this.readNodes, it => it.removePair(key).thenReturn(true).catchReturn(false))
       .get(0)
       .then(node => this.writeNodes.concat(node))
       .tap(nodes => this.writeNodes = _.uniqBy(nodes, "domain"))
@@ -64,7 +64,7 @@ class Orquestador {
 
   _pickNodeRoundRobin() {
     const node = this.writeNodes.shift();
-    this.writeNodes.push(node);
+    node && this.writeNodes.push(node);
     return node;
   }
 
