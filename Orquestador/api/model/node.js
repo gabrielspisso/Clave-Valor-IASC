@@ -24,12 +24,20 @@ class Node {
     return this.post("", pair);
   }
 
+  removePair(key) {
+    return this.delete(key);
+  }
+
   get(resource) {
     return this._request({ method: "GET", resource, json: true });
   }  
 
   post(resource, json) {
     return this._request({ method: "POST", resource, json });
+  }
+
+  delete(resource) {
+    return this._request({ method: "DELETE", resource, json: true });
   }
 
   _request(options) {

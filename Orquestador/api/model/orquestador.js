@@ -13,7 +13,7 @@ class Orquestador {
   }
   
   getValue(key) {
-    return this._safeGet(it => it.getByKey(key).reflect())
+    return this._mapSafely(it => it.getByKey(key).reflect())
       .get(0) 
       .tap((it) => this._throwIfUndefined(it, NotFound))
       .then(({ valor }) => ({ key, value: valor }));
@@ -41,19 +41,23 @@ class Orquestador {
     this.isMaster = value;
   }
 
+  removePair(key) {
+    return this._mapSafely(it => it.removePair(key).reflect())
+  }
+
   _throwIfUndefined(value, Err) {
     if(_.isUndefined(value))
       throw new Err()
   }
 
   _getRangeBy(getter) {
-    return this._safeGet(getter)
+    return this._mapSafely(getter)
       .then(_.flatten)
       .then(it => ({ values: it }));
   }
 
-  _safeGet(getter) {
-    return Promise.map(this.nodes, getter)
+  _mapSafely(request) {
+    return Promise.map(this.nodes, request)
       .filter(it => it.isFulfilled())
       .map(it => it.value())
   }
