@@ -4,6 +4,7 @@ const config = require("../../config");
 const Node = require("./node")
 const NotFound = require("./exceptions/notFound");
 const NoDataNodesLeft = require("./exceptions/noDataNodesLeft");
+const ExternalError = require("./exceptions/externalError");
 
 class Orquestador {
 
@@ -25,7 +26,7 @@ class Orquestador {
       .then(node => node || this._pickNodeRoundRobin())
       .tap(node => this._throwIfUndefined(node, NoDataNodesLeft))
       .then(node => node.write(pair))
-      .catch(err => this._handleWriteError(err)) // TODO: catchear exception del retry
+      .catch(ExternalError, err => this._handleWriteError(err, pair)) // TODO: catchear exception del retry
   }
 
   getHighThan(value) {
@@ -45,8 +46,7 @@ class Orquestador {
     return this._mapSafely(it => it.removePair(key).reflect())
   }
 
-  _handleWriteError({ statusCode, node }) {
-    console.log("EEE", statusCode)
+  _handleWriteError({ statusCode, node }, pair) {
     if(statusCode == 409)
       _.remove(this.writeNodes, { domain: node.domain })
     else
@@ -54,7 +54,7 @@ class Orquestador {
       _.remove(this.writeNodes, { domain: node.domain })
       _.remove(this.readNodes, { domain: node.domain })
     }
-    this.assignKeyAndValue(pair);
+    return this.assignKeyAndValue(pair);
   }
 
   _findCorrectNodeIfExists({ clave }) {
