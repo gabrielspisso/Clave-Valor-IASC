@@ -1,4 +1,8 @@
 const _ = require("lodash");
+const config = require("../../config");
+const Promise = require("bluebird");
+const TamanioInvalido = require("./exceptions/TamanioInvalido");
+
 class RepositorioDeDatos {
 
     constructor() {
@@ -11,12 +15,31 @@ class RepositorioDeDatos {
     }
 
     escribirValor({ clave, valor }) {
+
+        this.validarTamanioDeClave(clave);
+        this.validarTamanioDeValor(valor);
+
         let par = this.encontrarValor(clave);
         if (par) {
             par.valor = valor;
         }
         else {
             this.datos.push({ clave, valor });
+        }
+
+    }
+
+    validarTamanioDeValor(valor) {
+        this.validarTamanio(valor, config.tamanioMaximoDeUnValor)
+    }
+
+    validarTamanioDeClave(clave) {
+        this.validarTamanio(clave, config.tamanioMaximoDeClave);
+    }
+    
+    validarTamanio(campo, valorMaximo) {
+        if (_.size(campo) > valorMaximo) {
+            throw new TamanioInvalido;
         }
     }
 
@@ -25,16 +48,16 @@ class RepositorioDeDatos {
     }
 
     obtenerValoresMayoresA(unValor) {
-        return this.obtenerValoresSegunCriterio(( valor ) => valor > unValor)
+        return this.obtenerValoresSegunCriterio((valor) => valor > unValor)
     }
 
     obtenerValoresMenoresA(unValor) {
-        return this.obtenerValoresSegunCriterio(  valor => valor < unValor)
+        return this.obtenerValoresSegunCriterio(valor => valor < unValor)
     }
 
     obtenerValoresSegunCriterio(criterio) {
         return this.datos.filter(({ valor }) => criterio(valor))
-                .map(dato => dato.valor)
+            .map(dato => dato.valor)
     }
 
 

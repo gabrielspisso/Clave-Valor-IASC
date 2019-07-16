@@ -1,40 +1,43 @@
 const RepositorioDeDatos = require('./model/repositorioDeDatos');
+const BodyInvalido = require('./model/exceptions/BodyInvalido');
+const NotFound = require('./model/exceptions/NotFound');
+
+const Promise = require("bluebird");
 const _ = require("lodash");
+
 class Controller {
     constructor() {
         this.repositorioDeDatos = new RepositorioDeDatos();
-        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA"])
+        _.bindAll(this, ["escribirValor", "obtenerValorDeClave", "obtenerValoresMayoresA", "obtenerValoresMenoresA", "validarBody"])
     }
-    obtenerValorDeClave({ params: { key } }, response) {
-        let valor = this.repositorioDeDatos.obtenerValor(key);
-        if (valor) {
-            response.json({ valor });
-        }
-        else {
-            response.sendStatus(404);
-        }
+
+    obtenerValorDeClave({ params: { key } }, res) {
+        return Promise.resolve(this.repositorioDeDatos.obtenerValor(key))
+            .tap((valor) => { if (_.isUndefined(valor)) throw new NotFound() })
+            .then((valor) => { valor });
     }
 
     escribirValor({ body }, res) {
-        if (this.bodyValido(body)) {
-            this.repositorioDeDatos.escribirValor(body);
-            res.sendStatus(200);
-        }
-        else {
-            res.sendStatus(400);
-        }
+        return Promise.method(this.validarBody)(body)
+            .then(() => this.repositorioDeDatos.escribirValor(body))
     }
 
     bodyValido(par) {
-        return par && par.clave && par.valor;
+        return par && par.clave && par.valor
+    }
+
+    validarBody(par) {
+        if (!this.bodyValido(par)) {
+            throw new BodyInvalido;
+        };
     }
 
     obtenerValoresMayoresA({ params: { value } }, res) {
-        res.json(this.repositorioDeDatos.obtenerValoresMayoresA(value));
+        return Promise.resolve(this.repositorioDeDatos.obtenerValoresMayoresA(value));
     }
 
     obtenerValoresMenoresA({ params: { value } }, res) {
-        res.json(this.repositorioDeDatos.obtenerValoresMenoresA(value));
+        return Promise.resolve(this.repositorioDeDatos.obtenerValoresMenoresA(value));
     }
 }
 
