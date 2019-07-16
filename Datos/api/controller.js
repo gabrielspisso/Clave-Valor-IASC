@@ -13,7 +13,7 @@ class Controller {
 
     obtenerValorDeClave({ params: { key } }) {
         return this._getOrThrow(key)
-            .then((valor) => { valor });
+            .then((valor) => ({ valor }));
     }
 
     escribirValor({ body }, res) {
