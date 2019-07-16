@@ -11,10 +11,10 @@ class Orquestador {
     this.nodes = config.nodes.map(it => new Node(it));
     this.isMaster = false;
   }
-  
+
   getValue(key) {
     return this._safeGet(it => it.getByKey(key).reflect())
-      .get(0) 
+      .get(0)
       .tap((it) => this._throwIfUndefined(it, NotFound))
       .then(({ valor }) => ({ key, value: valor }));
   }
@@ -25,7 +25,11 @@ class Orquestador {
     // VER SI YA EXISTE
     return node.write(pair)
       .tap(() => this.nodes.push(node))
-      .catch(() => this.assignKeyAndValue(pair)) // TODO: catchear exception del retry
+      .catch((error) => {
+        if (error.status == 409) {
+          this.nodes.push(node);
+        }
+      }).then(() => this.assignKeyAndValue(pair))
   }
 
   getHighThan(value) {
@@ -42,7 +46,7 @@ class Orquestador {
   }
 
   _throwIfUndefined(value, Err) {
-    if(_.isUndefined(value))
+    if (_.isUndefined(value))
       throw new Err()
   }
 
@@ -57,7 +61,7 @@ class Orquestador {
       .filter(it => it.isFulfilled())
       .map(it => it.value())
   }
-  
+
 }
 
 module.exports = new Orquestador();
