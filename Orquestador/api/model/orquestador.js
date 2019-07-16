@@ -8,7 +8,8 @@ const NoDataNodesLeft = require("./exceptions/noDataNodesLeft");
 class Orquestador {
 
   constructor() {
-    this.nodes = config.nodes.map(it => new Node(it));
+    this.readNodes = config.nodes.map(it => new Node(it));
+    this.writeNodes = config.nodes.map(it => new Node(it));
     this.isMaster = false;
   }
 
@@ -24,7 +25,7 @@ class Orquestador {
       .then(node => node || this._pickNodeRoundRobin())
       .tap(node => this._throwIfUndefined(node, NoDataNodesLeft))
       .then(node => node.write(pair))
-      .catch(() => this.assignKeyAndValue(pair)) // TODO: catchear exception del retry
+      .catch(err => this._handleWriteError(err)) // TODO: catchear exception del retry
   }
 
   getHighThan(value) {
@@ -44,15 +45,27 @@ class Orquestador {
     return this._mapSafely(it => it.removePair(key).reflect())
   }
 
+  _handleWriteError({ statusCode, node }) {
+    console.log("EEE", statusCode)
+    if(statusCode == 409)
+      _.remove(this.writeNodes, { domain: node.domain })
+    else
+    {
+      _.remove(this.writeNodes, { domain: node.domain })
+      _.remove(this.readNodes, { domain: node.domain })
+    }
+    this.assignKeyAndValue(pair);
+  }
+
   _findCorrectNodeIfExists({ clave }) {
-    return Promise.filter(this.nodes, it => it.getByKey(clave).thenReturn(true).catchReturn(false))
+    return Promise.filter(this.readNodes, it => it.getByKey(clave).thenReturn(true).catchReturn(false))
       .get(0)
 
   }
 
   _pickNodeRoundRobin() {
-    const node = this.nodes.shift();
-    this.nodes.push(node);
+    const node = this.writeNodes.shift();
+    this.writeNodes.push(node);
     return node;
   }
 
@@ -68,7 +81,7 @@ class Orquestador {
   }
 
   _mapSafely(request) {
-    return Promise.map(this.nodes, request)
+    return Promise.map(this.readNodes, request)
       .filter(it => it.isFulfilled())
       .map(it => it.value())
   }

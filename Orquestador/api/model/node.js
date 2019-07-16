@@ -1,6 +1,7 @@
 const request = require("request-promise");
 const retry = require('promise-retry');
 const Promise = require("bluebird");
+const ExternalError = require("./exceptions/externalError");
 
 class Node {
   
@@ -45,6 +46,7 @@ class Node {
         uri: `${this.domain}/${options.resource}`,
         ...options
     }), 3))
+    .catch(({ statusCode }) => { throw new ExternalError({ statusCode, node: this })})
   }
        
 }
