@@ -30,7 +30,7 @@ class RepositorioDeDatos {
 
     }
     validarCapacidadTotal(clave){       
-        if(!this.datos.find(it =>it.clave === clave) && _.size(this.datos) == config.capacidadMaxima){
+        if(!_.some(this.datos, { clave }) && _.size(this.datos) == config.capacidadMaxima){
             throw new NodoCompleto;
         }
     }
