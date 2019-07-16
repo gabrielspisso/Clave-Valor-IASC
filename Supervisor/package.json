@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests --recursive",
-    "start": "node index.js"
+    "start": "forever index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "forever": "^1.0.0",
     "lodash": "^4.17.13",
     "mocha": "^6.1.4",
     "should": "^13.2.3",
