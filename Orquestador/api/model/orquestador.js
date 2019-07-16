@@ -20,20 +20,23 @@ class Orquestador {
   }
 
   assignKeyAndValue(pair) {
-    const node = this.nodes.shift();
+    let nodes = _.clone(this.nodes);
+    return this.write(pair, nodes);
+  }
+
+  write(pair, nodes) {
+    const node = nodes.shift();
     this._throwIfUndefined(node, NoDataNodesLeft);
     return node.write(pair)
+      .tap(() => _.remove(this.nodes, node))
       .tap(() => this.nodes.push(node))
       .catch((error) => {
-        console.log(this.nodes);
-        console.log(error.statusCode);
-        if (error.statusCode == 409) {
-          this.nodes.push(node);
+        if (error.statusCode == 500) {
+          _.remove(this.nodes, node);
         }
-        console.log(this.nodes);
+        return this.write(pair, nodes)
+      })
 
-        this.assignKeyAndValue(pair)
-      });
   }
 
   getHighThan(value) {
