@@ -39,6 +39,10 @@ class Controller {
     obtenerValoresMenoresA({ params: { value } }, res) {
         return Promise.resolve(this.repositorioDeDatos.obtenerValoresMenoresA(value));
     }
+
+    borrarPar({ params: { key } }) {
+        return Promise.resolve(this.repositorioDeDatos.borrarPar(key))
+    }
 }
 
 module.exports = new Controller();
